@@ -47,10 +47,10 @@ Here is the structure of the root directory of the Intel System Tools package:
 The Intel ME (TXE, SPS) System Tools utilities are not intended for end users—so you cannot find them on the official Intel website. However, some OEMs publish them as part of software updates together with device drivers. So, for integrating our PoC you need *Intel TXE System Tools* version 3.x, which can be found online.
 
 ## Intel System Studio
-You need to install Intel System Studio, a trial version of which can be downloaded from Intel [site](https://software.intel.com/en-us/system-studio). In our experiments, we used *Intel System Studio 2022*.
+You need to install Intel System Studio, a trial version of which can be downloaded from Intel [site](https://software.intel.com/en-us/system-studio). In our original experiments, we used *Intel System Studio 2018*. These instructions have been updated for Intel System Studio 2020.
 
 ## Intel TXE Firmware 
-The PoC targets **Intel TXE firmware version 3.0.1.1107**. The "CSTXE 3.0" image repository at [Win-Raid forums](https://winraid.level1techs.com/t/intel-cs-me-cs-txe-cs-sps-gsc-pmc-pchc-phy-orom-firmware-repositories/30869) contains the necessary firmware version.
+The PoC targets **Intel TXE firmware version 3.0.1.1107**. The "CSTXE 3.0" image repository at [Win-Raid forums](https://winraid.level1techs.com/t/intel-cs-me-cs-txe-cs-sps-gsc-pmc-pchc-phy-orom-firmware-repositories/30869) contains the necessary TXE firmware version.
 
 ## Python 
 All our scripts are written on Python. We recommend using [Python 2.7](https://www.python.org/download/releases/2.7/)
