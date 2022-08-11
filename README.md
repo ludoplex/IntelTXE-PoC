@@ -47,10 +47,10 @@ Here is the structure of the root directory of the Intel System Tools package:
 The Intel ME (TXE, SPS) System Tools utilities are not intended for end users—so you cannot find them on the official Intel website. However, some OEMs publish them as part of software updates together with device drivers. So, for integrating our PoC you need *Intel TXE System Tools* version 3.x, which can be found online.
 
 ## Intel System Studio
-You need to install Intel System Studio, a trial version of which can be downloaded from Intel [site](https://software.intel.com/en-us/system-studio). In our experiments, we used *Intel System Studio 2018*.
+You need to install Intel System Studio, a trial version of which can be downloaded from Intel [site](https://software.intel.com/en-us/system-studio). In our experiments, we used *Intel System Studio 2022*.
 
 ## Intel TXE Firmware 
-The PoC targets **Intel TXE firmware version 3.0.1.1107**. The SPI Flash image for [Gigabyte GB-BPCE-3350C version F5](http://download.gigabyte.com/FileList/BIOS/brix_bios_gb-bpce-3350c_f5.zip) contains the necessary firmware version.
+The PoC targets **Intel TXE firmware version 3.0.1.1107**. The "CSTXE 3.0" image repository at [Win-Raid forums](https://winraid.level1techs.com/t/intel-cs-me-cs-txe-cs-sps-gsc-pmc-pchc-phy-orom-firmware-repositories/30869) contains the necessary firmware version.
 
 ## Python 
 All our scripts are written on Python. We recommend using [Python 2.7](https://www.python.org/download/releases/2.7/)
@@ -101,18 +101,18 @@ To integrate *ct.bin* and *utok.bin* files, run the *FIT* utility (*fit.exe*) an
 
 # Other Hardware Platform
 
-If you are using an other hardware platform and don't have access to *TXE 3.0.1.1107*, you can download an SPI Flash image for [Gigabyte GB-BPCE-3350C version F5](http://download.gigabyte.eu/FileList/BIOS/brix_bios_gb-bpce-3350c_f5.zip) and extract the TXE section through *FIT*. *FIT* extracts different sections of the overall SPI image (SPI descriptor, UEFI/BIOS firmware, Intel ME firmware, and Unlock Token) when the image is opened and saves them in the folder *"image_name"/Decomp *.
+If you are using an other hardware platform and don't have access to *TXE 3.0.1.1107*, you can download the "CSTXE 3.0" image repository at [Win-Raid forums](https://winraid.level1techs.com/t/intel-cs-me-cs-txe-cs-sps-gsc-pmc-pchc-phy-orom-firmware-repositories/30869) and extract the TXE section through *FIT*. *FIT* extracts different sections of the overall SPI image (SPI descriptor, UEFI/BIOS firmware, Intel ME firmware, and Unlock Token) when the image is opened and saves them in the folder *"image_name"/Decomp *.
 
 ![screenshot](pic/TXERegion.png)
 
 So you can find the file with necessary Intel TXE firmware at <image name>/Decomp/TXE Region.bin
-Then, in *FIT*, open the SPI image for your particular platform and replace the file containing the Intel TXE firmware with the version obtained from the GB Brix 3350c image ("Intel(R) TXE Binary File" on the Flash Layout tab):
+Then, in *FIT*, open the SPI image for your particular platform. This will decompose your image and save the decomposed pieces to a folder in the same directory as fit.exe. After doing this, save the configuration XML and exit fit.exe. Now replace the "TXE Section.bin" file in the folder of your decomposed target BIOS with the version obtained from a decomposed TXE 3.0.1.1107 image. Re-open fit.exe and re-load your configuration from your saved XML file. If you replaced the file on the filesystem correctly, in the "Intel(R) TXE Binary File" on the Flash Layout tab you should see the version displayed as 3.0.1.1107 instead of whatever it originally came with:
 
 ![screenshot](pic/txebin.png)
 
 # Integrating Files Into the Firmware Image
 
-Now we need to indicate in *FIT* the files we generated for */home/bup/ct* and *Unlock Token*. On the *Debug* tab in *FIT*, you can specify the Trace Hub Binary and Unlock Token to integrate into the firmware. These should be the files that we generated already.
+Now we need to indicate in *FIT* the files we generated for */home/bup/ct* (**ct.bin**) and *Unlock Token* (**utok.bin**). On the *Debug* tab in *FIT*, you can specify the Trace Hub Binary and Unlock Token to integrate into the firmware. These should be the files that we generated already.
 
 ![screenshot](pic/tracehub.png)
 
@@ -134,11 +134,9 @@ If everything has been done correctly up to this point, the build process should
 
 ![screenshot](pic/buildsucc.png)
 
-# BringUP Main CPU
+# Enable HAP mode
 
-**Skip this step if you don't need to bring up the CPU.**
-
-You have to activate HAP mode for bringing up the CPU. 0-bit of the byte at the offset +0x102 should be set:
+You have to activate HAP mode for this exploit to work. Bit index 0 of the byte at the offset +0x102 should be set to 1:
 
 ![screenshot](pic/hap.png)
 
@@ -156,11 +154,11 @@ You will need a *USB 3.0 debug cable* to connect to the platform. Either [buy](h
 
 # Patching OpenIPC Configuration Files
 
-Intel develops and provides users with two software packages that can be used for JTAG debugging of platforms and the main CPU: DAL (DFx Abstraction Layer) and *OpenIPC*. Both *DAL* and *OpenIPC* are part of *Intel System Studio*. After installation of *Intel System Studio 2018*, *OpenIPC* appears in the following directory:
+Intel develops and provides users with two software packages that can be used for JTAG debugging of platforms and the main CPU: DAL (DFx Abstraction Layer) and *OpenIPC*. Both *DAL* and *OpenIPC* are part of *Intel System Studio*. After installation of *Intel System Studio 2020*, *OpenIPC* appears in the following directory:
 
 Windows
 ```
-C:\Intel\OpenIPC_1.1740.2381.100
+C:\IntelSWTools\system_studio_2020\tools\OpenIPC_1.2035.4868.100
 ```
 
 Linux
@@ -172,10 +170,10 @@ The *OpenIPC* configuration is encrypted and does not support the TXE core. So d
 
 ## Decrypting OpenIPC Configuration Files
 
-To decrypt the configuration files, extract the key from the *StructuredData* library (linux: *libStructuredData_x64.so*, Windows: *StructuredData_x64.dll*) in *OpenIPC/Bin* using the [IDA Pro](https://www.hex-rays.com/products/ida/support/download_freeware.shtml) script *openipc_key_extract.py*.  Pass the key (in our case, *4504fb02be0a9c4c84df2a89cf508bc3*) to the script *config_decryptor.py* with path to the OpenIPC directory.
+To decrypt the configuration files, extract the key from the *StructuredData* library (linux: *libStructuredData_x64.so*, Windows: *StructuredData_x64.dll*) in *OpenIPC/Bin* using the [IDA Pro](https://www.hex-rays.com/products/ida/support/download_freeware.shtml) script *openipc_key_extract.py*. If the script does not work, you can simply open the file in IDA Pro, and search for the string "Logging.xml" and then get the 16 bytes after that after the next alignment. (There will be 4 extra bytes, and then 4 zeros after the 16 bytes you care about.) Pass the key (in our case, *F820AD4F6CC2E9EE050C43DEBF631F59*) to the script *config_decryptor.py* with path to the OpenIPC directory.
 
 ```
-config_decryptor.py –k 4504fb02be0a9c4c84df2a89cf508bc3 –p C:\Intel\OpenIPC
+config_decryptor.py –k F820AD4F6CC2E9EE050C43DEBF631F59 –p C:\IntelSWTools\system_studio_2020\tools\OpenIPC_1.2035.4868.100
 ```
 
 ## Adding LMT Core to the Configuration
@@ -192,7 +190,7 @@ After decryption and patching, set the *IPC_PATH* environment variable to the ne
 
 Windows
 ```
-set IPC_PATH=c:\Intel\OpenIPC\Bin
+set IPC_PATH=C:\IntelSWTools\system_studio_2020\tools\OpenIPC_1.2035.4868.100\Bin
 ```
 
 # Performing an Initial Check of JTAG Operability
@@ -203,7 +201,7 @@ Like *DAL*, the *OpenIPC* library includes a command-line interface (CLI), writt
 The installation package for ipccli is at the following path:
 Windows
 ```
-<Program Files(x86)>\IntelSWTools\system_debugger_2018\debugger\ipccli\ ipccli-1.1740.544.100-py2.py3-none-any.whl
+C:\IntelSWTools\system_studio_2020\system_debugger_2020\debugger\ipccli\ipccli-1.2035.1920.100-py2.py3-none-any.whl
 ```
 
 Linux
@@ -214,11 +212,11 @@ Linux
 To install ipccli, run the following console command:
 
 ```
-pip install ipccli-1.1740.544.100-py2.py3-none-any.whl
+pip install ipccli-1.2035.1920.100-py2.py3-none-any.whl
 ```
 
 Once installed, *ipccli* is available within the runtime of the corresponding Python version (the one from which pip was invoked).
-To get started with *OpenIPC*, run the following commands in the Python console:
+To get started with *OpenIPC*, run the following commands in the Python console from an Administrator command prompt:
 ```
 import ipccli
 ipc = ipccli.baseaccess()
@@ -340,6 +338,8 @@ The platform gives more opportunities for debugging without a special [Intel CCA
 
 * Gigabyte Mini-PC Barebone (BRIX) GB-BPCE-3350C (rev:1.1, 1.2)
 * Beelink M1
+* [MinisForum N33](https://github.com/HackingThings/MinisForum_N33_JTAG) Mini PC - 2021
+* UP Squared Intel Atom® x7-E3950 [SKU UPS-APLX7-A20-0864](https://up-shop.org/up-squared-series.html) - 2022
 
 
 # Authors 
