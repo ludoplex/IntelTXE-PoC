@@ -33,7 +33,7 @@
 # Introduction
 Vulnerability [INTEL-SA-00086](https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00086.html) allows to activate [JTAG](https://en.wikipedia.org/wiki/JTAG) for [Intel Management Engine](https://en.wikipedia.org/wiki/Intel_Management_Engine) core. We developed our [JTAG PoC][8] for the [Gigabyte Brix GP-BPCE-3350C](https://www.gigabyte.com/ru/Mini-PcBarebone/GB-BPCE-3350C-rev-10) platform. Although we recommend that would-be researchers use the same platform, other manufacturers' platforms with the [Intel Apollo Lake](https://www.intel.com/content/www/us/en/embedded/products/apollo-lake/overview.html) chipset should support the PoC as well (for TXE version  **3.0.1.1107**). 
 
-Because the Gigabyte Brix GP-BPCE-3350C is no longer widely commercially available, these instructions have been updated to instead target the AAEON UP Squared ***[SKU UPS-APLX7-A20-0864](https://up-shop.org/up-squared-series.html)*** (Intel Atom® x7-E3950). (They may also work with the cheaper Apollo Lake based SKUs, but those have not been tested yet.) If you purchase this board, make sure to also get the power supply, [serial adapter](https://up-shop.org/usb-2-0-pin-header-cable.html), and any [USB-to-serial](https://amzn.to/3bP9Zat) adapter.
+Because the Gigabyte Brix GP-BPCE-3350C is no longer widely commercially available, these instructions have been updated to instead target the AAEON UP Squared ***[SKU UPS-APLX7-A20-0864](https://up-shop.org/up-squared-series.html)*** (Intel Atom® x7-E3950). (They may also work with the cheaper Apollo Lake based SKUs, but those have not been tested yet.) If you purchase this board, make sure to also get the power supply, [serial adapter](https://up-shop.org/usb-2-0-pin-header-cable.html), and any [USB-to-serial](https://amzn.to/3bP9Zat) adapter. Additionally, the UP Squared only needs a basic [USB debug cable](https://www.datapro.net/products/usb-3-0-super-speed-a-a-debugging-cable.html) to perform DCI debugging. The USB debug cable should be connected to the port where the yellow USB cable is shown [here](https://www.asset-intertech.com/resources/blog/2020/05/open-source-firmware-explorations-using-dci-on-the-aaeon-up-squared-board/).
 
 # Required Software 
 
@@ -56,11 +56,14 @@ Also the scripts require [pycrypto](https://pypi.org/project/pycrypto/) packet. 
 pip install pycrypto
 ```
 
-## AMIBCP
+## Performing baseline x86 debugging via DCI
 
-**This utility is only necessary if you need to bring up CPU.**
+While the purpose of this guide is to enable JTAG debugging in the ME via an exploit, it is a good practice to first sanity check and make sure you can perform normal JTAG debugging of the UP Squared board via DCI. AAEON no longer ships their BIOSes with DCI enabled, as they stated on their forums that this led to instability. (And older versions of the BIOS before v5.0 that had DCI enabled will no longer work with newer hardware, due to a DRAM vendor hardware change.) Therefore, to enable DCI JTAG on the UP Squared, you must perform 3 steps:
+1) Perform the binary patching described by Satoshi Tanda [here](https://forum.up-community.org/discussion/comment/12877#Comment_12877)
+2) Enable DCI through the BIOS configuration menu by pressing F7 at boot, entering the default UP password (*upassw0rd*), from the Main menu, going down to "CRB Setup" -> "CSB Chipset" -> "South Cluster Configuration" -> "Miscellaneous Configuration" -> "DCI Enable (HDCIEN)" and setting it to enabled, and then exiting out and saving the configuration
+3) Open "C:\IntelSWTools\system_studio_2020\system_debugger_2020\target_indicator\bin\TargetIndicator.exe" and confirm that you see it display a blue indicator that DCI is possible such as the below:
 
-EFI Human Interface Infrastructure (HII) is a special mechanism for creating a user interface in the UEFI, as well as processing and managing user input. EFI HII identifies default values for all options, including the hidden ones. As soon as the option related to DCI is found, it can be activated for the default configuration, and DCI can be enabled by restoring the BIOS factory settings. For bringing up the main CPU you need *AMI BIOS Configuration Program* version 5.xx, which can be also found online. 
+You can then launch ":\Program Files (x86)\IntelSWTools\sw_dev_tools\system_debugger_2020\system_debug_legacy\xdb.bat", connect to the target, and break into it, and single step to confirm you have baseline debugging capabilities.
 
 
 # Generating the Payload
@@ -78,17 +81,6 @@ me_utok_bxtp.py -f <file_name>
 The script generates the necessary data and exports it to the specified file (indicate either the full file path or, within the current directory, simply a name, *utok.bin* by default). This file will be used later by *FIT*.
 
 # Preparing the SPI Flash Image
-
-## Activating DCI option
-
-**Skip this step if you don't need to bring up the CPU.**
-
-To activate the *DCI Enable* option, run the AMIBCP utility and use it to open the SPI firmware image provided with your platform. For the Gigabyte Brix GP-BPCE-3350C, open the file downloaded from the Gigabyte link indicated above (path to image file in the archive: F5/image.bin).
-
-![screenshot](pic/amibcp.png)
-
-Now we need to enable the *HDCIEN* option in the *Setup Configuration* tab.
-
 
 ## Integrate payload
 
