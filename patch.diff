@@ -1,7 +1,7 @@
-diff -ruN ./a/OpenIPC_1.1740.2381.100/Config/BXTP/Default_TCI.xml ./b/OpenIPC_1.1740.2381.100/Config/BXTP/Default_TCI.xml
---- ./a/OpenIPC_1.1740.2381.100/Config/BXTP/Default_TCI.xml	2017-10-05 17:23:12.000000000 +0300
-+++ ./b/OpenIPC_1.1740.2381.100/Config/BXTP/Default_TCI.xml	2018-08-07 22:25:42.000000000 +0300
-@@ -80,11 +80,20 @@
+diff -Naur OpenIPC_1.2035.4868.100/Config/BXTP/BXTP_Default_TCI.xml OpenIPC_1.2035.4868.100_patched/Config/BXTP/BXTP_Default_TCI.xml
+--- OpenIPC_1.2035.4868.100/Config/BXTP/BXTP_Default_TCI.xml	2022-08-15 14:26:24.000000000 -0400
++++ OpenIPC_1.2035.4868.100_patched/Config/BXTP/BXTP_Default_TCI.xml	2022-08-15 14:25:51.000000000 -0400
+@@ -91,11 +91,20 @@
                <Pins.Hook3 Signal="PWRBRK1"/>
                <Pins.Hook4 Signal="PWRBRK2"/>
                <Pins.Hook6 Signal="CpuWarm"/>
@@ -22,7 +22,7 @@ diff -ruN ./a/OpenIPC_1.1740.2381.100/Config/BXTP/Default_TCI.xml ./b/OpenIPC_1.
              <Interface.DCI_RAW Enable="true" />
              <Interface.DCI_PACKETS Enable="true">
                <PacketInjection.SubscribeToStatus Value="true" />
-@@ -138,12 +147,32 @@
+@@ -152,12 +161,32 @@
      </Probe>
      <RunControl>
        <Vendors>
@@ -59,26 +59,29 @@ diff -ruN ./a/OpenIPC_1.1740.2381.100/Config/BXTP/Default_TCI.xml ./b/OpenIPC_1.
      </RunControl>
    </OpenIpcConfig>
  </OpenIpcConfigs>
-diff -ruN ./a/OpenIPC_1.1740.2381.100/Config/OpenIpcConfig.xml ./b/OpenIPC_1.1740.2381.100/Config/OpenIpcConfig.xml
---- ./a/OpenIPC_1.1740.2381.100/Config/OpenIpcConfig.xml	2017-10-05 17:23:12.000000000 +0300
-+++ ./b/OpenIPC_1.1740.2381.100/Config/OpenIpcConfig.xml	2018-07-09 18:57:48.000000000 +0300
-@@ -1,7 +1,5 @@
- <?xml version="1.0" encoding="utf-8"?>
+diff -Naur OpenIPC_1.2035.4868.100/Config/OpenIpcConfig.xml OpenIPC_1.2035.4868.100_patched/Config/OpenIpcConfig.xml
+--- OpenIPC_1.2035.4868.100/Config/OpenIpcConfig.xml	2022-08-15 14:26:25.000000000 -0400
++++ OpenIPC_1.2035.4868.100_patched/Config/OpenIpcConfig.xml	2022-08-15 14:25:51.000000000 -0400
+@@ -14,10 +14,8 @@
+     License.
+ 
+ -->
 -<DefaultConfigs xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation="Schemas/OpenIpcConfig.Default.xsd">
 -
--  <!-- A configuration name must be specified here -->
--  <DefaultIpcConfig Name="" />
--
+-  <!-- Specify the name of the configuration to use here. -->
+-  <!-- If no configuration is specified then OpenIPC will attempt to automatically configure. -->
+-  <DefaultIpcConfig Name="BXTP_DCI_OpenRC" />
 +<DefaultConfigs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Schemas/OpenIpcConfig.Default.xsd">
 +	<!-- A configuration name must be specified here -->
 +	<DefaultIpcConfig Name="BXTP_Default_TCI"/>
+ 
  </DefaultConfigs>
-diff -ruN ./a/OpenIPC_1.1740.2381.100/Data/Xml/BXTP/ProductInfo.xml ./b/OpenIPC_1.1740.2381.100/Data/Xml/BXTP/ProductInfo.xml
---- ./a/OpenIPC_1.1740.2381.100/Data/Xml/BXTP/ProductInfo.xml	2018-09-13 11:37:20.000000000 +0300
-+++ ./b/OpenIPC_1.1740.2381.100/Data/Xml/BXTP/ProductInfo.xml	2018-06-06 01:20:34.000000000 +0300
+diff -Naur OpenIPC_1.2035.4868.100/Data/Xml/BXTP/ProductInfo.xml OpenIPC_1.2035.4868.100_patched/Data/Xml/BXTP/ProductInfo.xml
+--- OpenIPC_1.2035.4868.100/Data/Xml/BXTP/ProductInfo.xml	2022-08-15 14:26:25.000000000 -0400
++++ OpenIPC_1.2035.4868.100_patched/Data/Xml/BXTP/ProductInfo.xml	2022-08-15 14:25:51.000000000 -0400
 @@ -4,21 +4,26 @@
    </ProductIdentification>
-   <ProductDescription DeviceType="BXTP_CLTAPC" Stepping="*">
+   <ProductDescription DeviceType="BXTP_CLTAPC" Stepping="*" AddTapNetworkInstanceId="false">
      <TapInfo TapName="BXTP_CLTAPC" NodeType="Uncore" DeviceType="BXTP_CLTAPC" Stepping="$(Stepping)" AddInstanceNameSuffix="true"/>
 +    <TapInfo TapName="CSE_TAP" NodeType="Box" DeviceType="LMT" Stepping="B3" InstanceId="0" AddInstanceNameSuffix="false" DeviceSubType="2">
 +      <TapSelect Name="CSE_C0" DeviceType="LMT" NodeType="Core" SelectProc="" InstanceId="0" DeviceSubType="2">
@@ -86,35 +89,35 @@ diff -ruN ./a/OpenIPC_1.1740.2381.100/Data/Xml/BXTP/ProductInfo.xml ./b/OpenIPC_
 +      </TapSelect>
 +    </TapInfo>
      <TapInfo TapName="GLM_MODULE0" NodeType="Box" DeviceType="GLM_MODULE" Stepping="E0" InstanceId="0" AddInstanceNameSuffix="false">
--      <TapSelect Name="GLM_C0" DeviceType="GLM" NodeType="Core" SelectProc="glm.tap.select_core(0)" InstanceId="0" DeviceSubType="">
+-      <TapSelect Name="GLM_C0" DeviceType="GLM" NodeType="Core" SelectProc="common.ia.atom_core.tap.select_core(0)" InstanceId="0" DeviceSubType="">
 +      <!--<TapSelect Name="GLM_C0" DeviceType="GLM" NodeType="Core" SelectProc="glm.tap.select_core(0)" InstanceId="0" DeviceSubType="">
          <TapSelect Name="GLM_C0_T0" DeviceType="GLM" NodeType="Thread" InstanceId="0" DeviceSubType=""/>
        </TapSelect>
-       <TapSelect Name="GLM_C1" DeviceType="GLM" NodeType="Core" SelectProc="glm.tap.select_core(1)" InstanceId="1" DeviceSubType="">
+       <TapSelect Name="GLM_C1" DeviceType="GLM" NodeType="Core" SelectProc="common.ia.atom_core.tap.select_core(1)" InstanceId="1" DeviceSubType="">
          <TapSelect Name="GLM_C1_T0" DeviceType="GLM" NodeType="Thread" InstanceId="0" DeviceSubType=""/>
 -      </TapSelect>
 +      </TapSelect>-->
      </TapInfo>
      <TapInfo TapName="GLM_MODULE1" NodeType="Box" DeviceType="GLM_MODULE" Stepping="E0" InstanceId="1" AddInstanceNameSuffix="false">
--      <TapSelect Name="GLM_C2" DeviceType="GLM" NodeType="Core" SelectProc="glm.tap.select_core(0)" InstanceId="0" DeviceSubType="">
-+      <!--<TapSelect Name="GLM_C2" DeviceType="GLM" NodeType="Core" SelectProc="glm.tap.select_core(0)" InstanceId="0" DeviceSubType="">
+-      <TapSelect Name="GLM_C2" DeviceType="GLM" NodeType="Core" SelectProc="common.ia.atom_core.tap.select_core(0)" InstanceId="0" DeviceSubType="">
++      <!--<TapSelect Name="GLM_C2" DeviceType="GLM" NodeType="Core" SelectProc="common.ia.atom_core.tap.select_core(0)" InstanceId="0" DeviceSubType="">
          <TapSelect Name="GLM_C2_T0" DeviceType="GLM" NodeType="Thread" InstanceId="0" DeviceSubType=""/>
        </TapSelect>
-       <TapSelect Name="GLM_C3" DeviceType="GLM" NodeType="Core" SelectProc="glm.tap.select_core(1)" InstanceId="1" DeviceSubType="">
+       <TapSelect Name="GLM_C3" DeviceType="GLM" NodeType="Core" SelectProc="common.ia.atom_core.tap.select_core(1)" InstanceId="1" DeviceSubType="">
          <TapSelect Name="GLM_C3_T0" DeviceType="GLM" NodeType="Thread" InstanceId="0" DeviceSubType=""/>
 -      </TapSelect>
 +      </TapSelect>-->
      </TapInfo>
+     <TapInfo TapName="MDU_DFX_AGG_TAP" NodeType="Chipset" DeviceType="DFX_AGG" Stepping="A0" AddInstanceNameSuffix="true"/>
      <TapInfo TapName="PUNIT_TAP" NodeType="Chipset" DeviceType="BXTP_PUNIT_TAP" Stepping="$(Stepping)" AddInstanceNameSuffix="true"/>
-     <TapInfo TapName="TAP2IOSF_TAP" NodeType="Chipset" DeviceType="TAP2IOSFSB" Stepping="A0" AddInstanceNameSuffix="true"/>
-diff -ruN ./a/OpenIPC_1.1740.2381.100/Data/Xml/BXTP/TapNetworks.B0.xml ./b/OpenIPC_1.1740.2381.100/Data/Xml/BXTP/TapNetworks.B0.xml
---- ./a/OpenIPC_1.1740.2381.100/Data/Xml/BXTP/TapNetworks.B0.xml	2018-09-13 11:37:20.000000000 +0300
-+++ ./b/OpenIPC_1.1740.2381.100/Data/Xml/BXTP/TapNetworks.B0.xml	2018-06-04 20:18:32.000000000 +0300
+diff -Naur OpenIPC_1.2035.4868.100/Data/Xml/BXTP/TapNetworks.B0.xml OpenIPC_1.2035.4868.100_patched/Data/Xml/BXTP/TapNetworks.B0.xml
+--- OpenIPC_1.2035.4868.100/Data/Xml/BXTP/TapNetworks.B0.xml	2022-08-15 14:26:25.000000000 -0400
++++ OpenIPC_1.2035.4868.100_patched/Data/Xml/BXTP/TapNetworks.B0.xml	2022-08-15 14:25:51.000000000 -0400
 @@ -119,6 +119,7 @@
        </Tap>
-       <Tap Name="RDU_SW_TAP" IrLen="8" Idcode="0x02100015" IdcodeIr="0x0C" VerifyProc="verify_idcode()" SerializeProc="common.soc.add_tap(0x11,6,18)" DeserializeProc="common.soc.remove_tap(0x11,0,18)" InsertBeforeParent="false">
-         <Tap Name="CDU_CSE_TAP" IrLen="8" Idcode="0x02100a11" IdcodeIr="0x0C" VerifyProc="verify_idcode()" SerializeProc="common.soc.add_tap(0x11,0,32)" DeserializeProc="common.soc.remove_tap(0x11,0,32)" InsertBeforeParent="false">
+       <Tap Name="RDU_SW_TAP" IrLen="8" Idcode="0x02100015" IdcodeIr="0x0C" VerifyProc="verify_idcode()" SerializeProc="common.tap.add_tap(0x11,6,18)" DeserializeProc="common.tap.remove_tap(0x11,6,18)" InsertBeforeParent="false">
+         <Tap Name="CDU_CSE_TAP" IrLen="8" Idcode="0x02100a11" IdcodeIr="0x0C" VerifyProc="verify_idcode()" SerializeProc="common.tap.add_tap(0x11,0,32)" DeserializeProc="common.tap.remove_tap(0x11,0,32)" InsertBeforeParent="false">
 +          <Tap Name="CSE_TAP" IrLen="8" Idcode="0x100859" IdcodeIr="0x0C" VerifyProc="verify_idcode()" SerializeProc="common.soc.add_tap(0x11,0,6)" DeserializeProc="common.soc.remove_tap(0x11,0,6)" InsertBeforeParent="false"/>
-           <Tap Name="CDU_CSE_SCAN_TAP" IrLen="8" Idcode="0x001008d1" IdcodeIr="0x0C" VerifyProc="verify_idcode()" SerializeProc="common.soc.add_tap(0x11,2,6)" DeserializeProc="common.soc.remove_tap(0x11,0,6)" InsertBeforeParent="false"/>
-           <Tap Name="CDU_CSE_RETIME_TAP" IrLen="8" Idcode="0x0010085d" IdcodeIr="0x0C" VerifyProc="verify_idcode()" SerializeProc="common.soc.add_tap(0x11,4,6)" DeserializeProc="common.soc.remove_tap(0x11,0,6)" InsertBeforeParent="false"/>
+           <Tap Name="CDU_CSE_SCAN_TAP" IrLen="8" Idcode="0x001008d1" IdcodeIr="0x0C" VerifyProc="verify_idcode()" SerializeProc="common.tap.add_tap(0x11,2,6)" DeserializeProc="common.tap.remove_tap(0x11,2,6)" InsertBeforeParent="false"/>
+           <Tap Name="CDU_CSE_RETIME_TAP" IrLen="8" Idcode="0x0010085d" IdcodeIr="0x0C" VerifyProc="verify_idcode()" SerializeProc="common.tap.add_tap(0x11,4,6)" DeserializeProc="common.tap.remove_tap(0x11,4,6)" InsertBeforeParent="false"/>
          </Tap>
