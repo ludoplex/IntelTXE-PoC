@@ -137,7 +137,8 @@ If everything has been done correctly up to this point, the build process should
 
 # Enable HAP mode
 
-You have to activate HAP mode for this exploit to work. Bit index 0 of the byte at the offset +0x102 should be set to 1:
+You have to activate HAP mode for this exploit to work. Bit index 0 of the byte at the offset +0x102 should be manually set to 1 via a hex 
+editor in the output file that was built by fit.exe:
 
 ![screenshot](pic/hap.png)
 
