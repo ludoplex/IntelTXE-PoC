@@ -60,11 +60,13 @@ pip install pycrypto
 
 While the purpose of this guide is to enable JTAG debugging in the ME via an exploit, it is a good practice to first sanity check and make sure you can perform normal JTAG debugging of the UP Squared board via DCI. AAEON no longer ships their BIOSes with DCI enabled, as they stated on their forums that this led to instability. (And older versions of the BIOS before v5.0 that had DCI enabled will no longer work with newer hardware, due to a DRAM vendor hardware change.) Therefore, to enable DCI JTAG on the UP Squared, you must perform 3 steps:
 1) Perform the binary patching described by Satoshi Tanda [here](https://forum.up-community.org/discussion/comment/12877#Comment_12877)
-2) Enable DCI through the BIOS configuration menu by pressing F7 at boot, entering the default UP password (*upassw0rd*), from the Main menu, going down to "CRB Setup" -> "CSB Chipset" -> "South Cluster Configuration" -> "Miscellaneous Configuration" -> "DCI Enable (HDCIEN)" and setting it to enabled, and then exiting out and saving the configuration
-3) Open "C:\IntelSWTools\system_studio_2020\system_debugger_2020\target_indicator\bin\TargetIndicator.exe" and confirm that you see it display a blue indicator that DCI is possible such as the below:
+2) Enable DCI through the BIOS configuration menu by pressing F7 at boot, entering the default UP password (*upassw0rd*), from the Main menu, going down to "CRB Setup" -> "CSB Chipset" -> "South Cluster Configuration" -> "Miscellaneous Configuration" -> "DCI Enable (HDCIEN)" and setting it to enabled. Then exit the BIOS setup menu, save the configuration change, and reboot the system.
+3) Open "C:\IntelSWTools\system_studio_2020\system_debugger_2020\target_indicator\bin\TargetIndicator.exe" and confirm that when you have that system plugged in to the UP Squared via the debug cable, that there is displayed a blue indicator that DCI is possible such as the below:
+![DCI Indicator](pic/DCI_Indicator.png)
 
 You can then launch ":\Program Files (x86)\IntelSWTools\sw_dev_tools\system_debugger_2020\system_debug_legacy\xdb.bat", connect to the target, and break into it, and single step to confirm you have baseline debugging capabilities.
 
+(You can also follow the blog series by Alan Sguigna [here](https://www.asset-intertech.com/resources/blog/2020/05/open-source-firmware-explorations-using-dci-on-the-aaeon-up-squared-board/) on how to build the Debug-build of the open source code for this platform, which will be DCI-debuggable from the reset vector. However, note that due to a hardware change for DRAM, this built-from-source code will no longer fully boot on new hardware - it will instead hang at boot time as noted [here](https://forum.up-community.org/discussion/comment/12877). Intel TianoCore maintainers have refused to fix this.)
 
 # Generating the Payload
 Run the script **me_exp_bxtp.py**:
@@ -74,9 +76,9 @@ me_exp_bxtp.py -f <file_name>
 The script generates the necessary data and exports it to the specified file (indicate either the full file path or, within the current directory, simply a name, *ct.bin* by default). This file will be used later by *FIT*.
 
 # Generating the Unlock Token
-Run the script **me_utok_bxtp.py**:
+Run the script **utock_gen.py**:
 ```
-me_utok_bxtp.py -f <file_name>
+utock_gen.py -f <file_name>
 ```
 The script generates the necessary data and exports it to the specified file (indicate either the full file path or, within the current directory, simply a name, *utok.bin* by default). This file will be used later by *FIT*.
 
@@ -84,7 +86,7 @@ The script generates the necessary data and exports it to the specified file (in
 
 ## Integrate payload
 
-To integrate *ct.bin* and *utok.bin* files, run the *FIT* utility (*fit.exe*) and use it to open the SPI firmware image.
+To integrate the *ct.bin* and *utok.bin* files, run the *FIT* utility (*fit.exe*) obtained from *CSTXE System Tools v3* use it first to open the **Intel TXE firmware version 3.0.1.1107** (3.0.1.1107_B_PRD_RGN.bin) from the "CSTXE 3.0" image repository at [Win-Raid forums](https://winraid.level1techs.com/t/intel-cs-me-cs-txe-cs-sps-gsc-pmc-pchc-phy-orom-firmware-repositories/30869).
 
 ![screenshot](pic/fit.png)
 
@@ -148,11 +150,6 @@ Intel develops and provides users with two software packages that can be used fo
 Windows
 ```
 C:\IntelSWTools\system_studio_2020\tools\OpenIPC_1.2035.4868.100
-```
-
-Linux
-```
-/opt/intel/system_studio_2018/system_debugger_2018/debugger/openipc
 ```
 
 The *OpenIPC* configuration is encrypted and does not support the TXE core. So decrypt the configuration and add a TXE description to it. 
