@@ -167,7 +167,7 @@ The *OpenIPC* configuration is encrypted and does not support the TXE core. So d
 
 ## Decrypting OpenIPC Configuration Files
 
-To decrypt the configuration files, extract the key from the *StructuredData* library (linux: *libStructuredData_x64.so*, Windows: *StructuredData_x64.dll*) in *OpenIPC/Bin* using the [IDA Pro](https://www.hex-rays.com/products/ida/support/download_freeware.shtml) script *openipc_key_extract.py*. If the script does not work, you can simply open the file in IDA Pro, and search for the string "Logging.xml" and then get the 16 bytes after that after the next alignment. (There will be 4 extra bytes, and then 4 zeros after the 16 bytes you care about.) Pass the key (in our case, *F820AD4F6CC2E9EE050C43DEBF631F59*) to the script *config_decryptor.py* with path to the OpenIPC directory.
+To decrypt the configuration files, extract the key from the *StructuredData* library (*StructuredData_x64.dll*) in *OpenIPC/Bin* using the [IDA Pro](https://www.hex-rays.com/products/ida/support/download_freeware.shtml) script *openipc_key_extract.py*. If the script does not work, you can simply open the file in IDA Pro, and search for the string "Logging.xml" and then get the 16 bytes after that after the next alignment. (There will be 4 extra bytes, and then 4 zeros after the 16 bytes you care about.) Pass the key (in our case, *F820AD4F6CC2E9EE050C43DEBF631F59*) to the script *config_decryptor.py* with path to the OpenIPC directory.
 
 ```
 config_decryptor.py –k F820AD4F6CC2E9EE050C43DEBF631F59 –p C:\IntelSWTools\system_studio_2020\tools\OpenIPC_1.2035.4868.100
@@ -199,11 +199,6 @@ The installation package for ipccli is at the following path:
 Windows
 ```
 C:\IntelSWTools\system_studio_2020\system_debugger_2020\debugger\ipccli\ipccli-1.2035.1920.100-py2.py3-none-any.whl
-```
-
-Linux
-```
-/opt/intel/system_studio_2018/system_debugger_2018/debugger/ipccli/ipccli-1.1811.727.100-py2.py3-none-any.whl
 ```
 
 To install ipccli, run the following console command:
