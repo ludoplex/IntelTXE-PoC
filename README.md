@@ -117,14 +117,14 @@ There will be an OEM Public key hash under the Platform Protection tab. Remove i
 ![screenshot](pic/dissig.png)
 
 # Building the Firmware Image
-Select Build Settings
+Select Build Settings  
 ![screenshot](pic/buildsettings.png)
 
-By default it will look like the following:
-![screenshot](pic/buildsetting2.png)
+By default it will look like the following:  
+![screenshot](pic/buildsettings2.png)
 
 Update it change the outimage.bin to the same name as your input file. Also set the "Enable Boot Guard warning message at build time" to *No*, 
-and "Verify manifest signing keys against the OEM Key Manifest" to *No*. It should then look like the following:
+and "Verify manifest signing keys against the OEM Key Manifest" to *No*. It should then look like the following:  
 ![screenshot](pic/buildsettings3.png)
 
 Build the image by selecting *Build Image* in the *Build menu*.
