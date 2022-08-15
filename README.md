@@ -33,21 +33,18 @@
 # Introduction
 Vulnerability [INTEL-SA-00086](https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00086.html) allows to activate [JTAG](https://en.wikipedia.org/wiki/JTAG) for [Intel Management Engine](https://en.wikipedia.org/wiki/Intel_Management_Engine) core. We developed our [JTAG PoC][8] for the [Gigabyte Brix GP-BPCE-3350C](https://www.gigabyte.com/ru/Mini-PcBarebone/GB-BPCE-3350C-rev-10) platform. Although we recommend that would-be researchers use the same platform, other manufacturers' platforms with the [Intel Apollo Lake](https://www.intel.com/content/www/us/en/embedded/products/apollo-lake/overview.html) chipset should support the PoC as well (for TXE version  **3.0.1.1107**). 
 
-
+Because the Gigabyte Brix GP-BPCE-3350C is no longer widely commercially available, these instructions have been updated to instead target the AAEON UP Squared ***[SKU UPS-APLX7-A20-0864](https://up-shop.org/up-squared-series.html)*** (Intel Atom® x7-E3950). (They may also work with the cheaper Apollo Lake based SKUs, but those have not been tested yet.) If you purchase this board, make sure to also get the power supply, [serial adapter](https://up-shop.org/usb-2-0-pin-header-cable.html), and any [USB-to-serial](https://amzn.to/3bP9Zat) adapter.
 
 # Required Software 
 
 ## Intel System Tools
 
-Vulnerability *INTEL-SA-00086* involves a buffer overflow when handling a file stored on MFS (the [internal ME file system][6]). The full file path is */home/bup/ct*. You will need to integrate it into the ME firmware by using *Intel Flash Image Tool (FIT)*, one of the Intel System Tools provided by Intel to OEMs of hardware based on Intel PCH chipsets.
-Here is the structure of the root directory of the Intel System Tools package:
+Vulnerability *INTEL-SA-00086* involves a buffer overflow when handling a file stored on MFS (the [internal ME file system][6]). The full file path is */home/bup/ct*. You will need to integrate a vulnerability-exploiting version of this file into the ME firmware by using *Intel Flash Image Tool (FIT)*, one of the Intel System Tools provided by Intel to OEMs of hardware based on Intel PCH chipsets.
 
-![screenshot](pic/meinfo.png)
-
-The Intel ME (TXE, SPS) System Tools utilities are not intended for end users—so you cannot find them on the official Intel website. However, some OEMs publish them as part of software updates together with device drivers. So, for integrating our PoC you need *Intel TXE System Tools* version 3.x, which can be found online.
+The Intel ME (TXE, SPS) System Tools utilities are not intended for end users—so you cannot find them on the official Intel website. However, some OEMs publish them as part of software updates together with device drivers. So, for integrating our PoC you need "CSTXE System Tools v3", which can be found [here](https://winraid.level1techs.com/t/intel-converged-security-trusted-execution-engine-drivers-firmware-and-tools/30730).
 
 ## Intel System Studio
-You need to install Intel System Studio, a trial version of which can be downloaded from Intel [site](https://software.intel.com/en-us/system-studio). In our original experiments, we used *Intel System Studio 2018*. These instructions have been updated for Intel System Studio 2020.
+You need to install Intel System Studio for performing JTAG debugging. In our original experiments, we used *Intel System Studio 2018*. These instructions have been updated for **Intel System Studio 2020** which can be obtained from [here](https://drive.google.com/file/d/15D6KQuC_WoTrxm_4ZUPmGYzrIIv9uQAS/view?usp=sharing).
 
 ## Intel TXE Firmware 
 The PoC targets **Intel TXE firmware version 3.0.1.1107**. The "CSTXE 3.0" image repository at [Win-Raid forums](https://winraid.level1techs.com/t/intel-cs-me-cs-txe-cs-sps-gsc-pmc-pchc-phy-orom-firmware-repositories/30869) contains the necessary TXE firmware version.
@@ -356,6 +353,10 @@ Maxim Goryachy ([@h0t_max][2])
 
 Dmitry Sklyarov ([@_Dmit][3])
 
+# Update for Intel System Studio 2020 & UP Squared hardware
+  
+Xeno Kovah ([@\_XenoKovah][10])
+
 
 # License
 Copyright (c) 2018 Mark Ermolov, Maxim Goryachy at Positive Technologies
@@ -375,3 +376,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 [7]: https://www.blackhat.com/docs/eu-17/materials/eu-17-Goryachy-How-To-Hack-A-Turned-Off-Computer-Or-Running-Unsigned-Code-In-Intel-Management-Engine-wp.pdf
 [8]: https://github.com/ptresearch/IntelME-JTAG
 [9]: http://blog.ptsecurity.com/2017/08/disabling-intel-me.html
+[10]: https://twitter.com/XenoKovah
