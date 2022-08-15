@@ -108,18 +108,28 @@ Now we need to indicate in *FIT* the files we generated for */home/bup/ct* (**ct
 ![screenshot](pic/tracehub.png)
 
 # Disabling OEM Signing
-Simply remove the OEM Public Key Hash field from *FIT*:
+There will be an OEM Public key hash under the Platform Protection tab. Remove it by entering 32 zeros:
+
+```
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+```
 
 ![screenshot](pic/dissig.png)
 
 # Building the Firmware Image
+Select Build Settings
+![screenshot](pic/buildsettings.png)
+
+By default it will look like the following:
+![screenshot](pic/buildsetting2.png)
+
+Update it change the outimage.bin to the same name as your input file. Also set the "Enable Boot Guard warning message at build time" to *No*, 
+and "Verify manifest signing keys against the OEM Key Manifest" to *No*. It should then look like the following:
+![screenshot](pic/buildsettings3.png)
+
 Build the image by selecting *Build Image* in the *Build menu*.
 
 ![screenshot](pic/build.png)
-
-Ignore the message about BootGuard settings (click "Yes"):
-
-![screenshot](pic/bootguard.png)
 
 If everything has been done correctly up to this point, the build process should be successful and *FIT* outputs something like the following console message:
 
