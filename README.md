@@ -86,22 +86,23 @@ The script generates the necessary data and exports it to the specified file (in
 
 ## Integrate payload
 
-To integrate the *ct.bin* and *utok.bin* files, run the *FIT* utility (*fit.exe*) obtained from *CSTXE System Tools v3* use it first to open the **Intel TXE firmware version 3.0.1.1107** (3.0.1.1107_B_PRD_RGN.bin) from the "CSTXE 3.0" image repository at [Win-Raid forums](https://winraid.level1techs.com/t/intel-cs-me-cs-txe-cs-sps-gsc-pmc-pchc-phy-orom-firmware-repositories/30869).
+To integrate the *ct.bin* and *utok.bin* files, run the *FIT* utility (*fit.exe*) obtained from *CSTXE System Tools v3*. First use it to open your UP Squared BIOS image that has been DCI enabled (e.g. "UPA1AM61_DCI_Enabled.bin")
 
 ![screenshot](pic/fit.png)
 
-# Other Hardware Platform
-
-If you are using an other hardware platform and don't have access to *TXE 3.0.1.1107*, you can download the "CSTXE 3.0" image repository at [Win-Raid forums](https://winraid.level1techs.com/t/intel-cs-me-cs-txe-cs-sps-gsc-pmc-pchc-phy-orom-firmware-repositories/30869) and extract the TXE section through *FIT*. *FIT* extracts different sections of the overall SPI image (SPI descriptor, UEFI/BIOS firmware, Intel ME firmware, and Unlock Token) when the image is opened and saves them in the folder *"image_name"/Decomp *.
+*FIT* extracts different sections of the overall SPI image (SPI descriptor, UEFI/BIOS firmware, Intel ME firmware, and Unlock Token) when the image is opened and saves them in the folder *"image_name"/Decomp* in the same local directory as FIT.
 
 ![screenshot](pic/TXERegion.png)
 
-So you can find the file with necessary Intel TXE firmware at <image name>/Decomp/TXE Region.bin
-Then, in *FIT*, open the SPI image for your particular platform. This will decompose your image and save the decomposed pieces to a folder in the same directory as fit.exe. After doing this, save the configuration XML and exit fit.exe. Now replace the "TXE Section.bin" file in the folder of your decomposed target BIOS with the version obtained from a decomposed TXE 3.0.1.1107 image. Re-open fit.exe and re-load your configuration from your saved XML file. If you replaced the file on the filesystem correctly, in the "Intel(R) TXE Binary File" on the Flash Layout tab you should see the version displayed as 3.0.1.1107 instead of whatever it originally came with:
+After doing this, save the configuration XML (e.g. to "UPA1AM61_DCI_Enabled.xml") and exit fit.exe.
+
+In order to downgrade the Intel TXE firmware to the vulnerable version **3.0.1.1107**, we need to replace the file <image name>/Decomp/TXE Region.bin, with the file "3.0.1.1107_B_PRD_RGN.bin". This should be done by renaming the original file to "TXE Region.bin.orig" and then naming "3.0.1.1107_B_PRD_RGN.bin" to "TXE Region.bin".
+  
+Re-open fit.exe and re-load your configuration from your saved XML file. If you replaced the file on the filesystem correctly, in the "Intel(R) TXE Binary File" on the Flash Layout tab you should see the version displayed as 3.0.1.1107 instead of whatever it originally came with:
 
 ![screenshot](pic/txebin.png)
 
-# Integrating Files Into the Firmware Image
+# Integrating Exploit Files Into the Firmware Image
 
 Now we need to indicate in *FIT* the files we generated for */home/bup/ct* (**ct.bin**) and *Unlock Token* (**utok.bin**). On the *Debug* tab in *FIT*, you can specify the Trace Hub Binary and Unlock Token to integrate into the firmware. These should be the files that we generated already.
 
