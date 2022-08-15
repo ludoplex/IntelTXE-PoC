@@ -333,6 +333,9 @@ Mark Ermolov ([@\_markel___][1])
 
 Maxim Goryachy ([@h0t_max][2])
 
+### README.md update for Intel System Studio 2020 & UP Squared hardware
+  
+Xeno Kovah ([@XenoKovah][10])
 
 # Research Team
 
@@ -341,10 +344,6 @@ Mark Ermolov ([@\_markel___][1])
 Maxim Goryachy ([@h0t_max][2])
 
 Dmitry Sklyarov ([@_Dmit][3])
-
-# Update for Intel System Studio 2020 & UP Squared hardware
-  
-Xeno Kovah ([@\_XenoKovah][10])
 
 
 # License
