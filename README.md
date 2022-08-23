@@ -59,7 +59,7 @@ pip install pycrypto
 ## Performing baseline x86 debugging via DCI
 
 While the purpose of this guide is to enable JTAG debugging in the ME via an exploit, it is a good practice to first sanity check and make sure you can perform normal JTAG debugging of the UP Squared board via DCI. AAEON no longer ships their BIOSes with DCI enabled, as they stated on their forums that this led to instability. (And older versions of the BIOS before v5.0 that had DCI enabled will no longer work with newer hardware, due to a DRAM vendor hardware change.) Therefore, to enable DCI JTAG on the UP Squared, you must perform 3 steps:
-1) Perform the binary patching described by Satoshi Tanda [here](https://forum.up-community.org/discussion/comment/12877#Comment_12877)
+1) Perform the binary patching described by Satoshi Tanda [here](https://forum.up-community.org/discussion/comment/12877#Comment_12877) (although it should say to use UEFITool 0.28 not 2.8).
 2) Enable DCI through the BIOS configuration menu by pressing F7 at boot, entering the default UP password (*upassw0rd*), from the Main menu, going down to "CRB Setup" -> "CSB Chipset" -> "South Cluster Configuration" -> "Miscellaneous Configuration" -> "DCI Enable (HDCIEN)" and setting it to enabled. Then exit the BIOS setup menu, save the configuration change, and reboot the system.
 3) Open "C:\IntelSWTools\system_studio_2020\system_debugger_2020\target_indicator\bin\TargetIndicator.exe" and confirm that when you have that system plugged in to the UP Squared via the debug cable, that there is displayed a blue indicator that DCI is possible such as the below:
 ![DCI Indicator](pic/DCI_Indicator.png)
