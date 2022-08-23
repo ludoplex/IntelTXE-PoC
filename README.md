@@ -33,7 +33,7 @@
 # Introduction
 Vulnerability [INTEL-SA-00086](https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00086.html) allows to activate [JTAG](https://en.wikipedia.org/wiki/JTAG) for [Intel Management Engine](https://en.wikipedia.org/wiki/Intel_Management_Engine) core. We developed our [JTAG PoC][8] for the [Gigabyte Brix GP-BPCE-3350C](https://www.gigabyte.com/ru/Mini-PcBarebone/GB-BPCE-3350C-rev-10) platform. Although we recommend that would-be researchers use the same platform, other manufacturers' platforms with the [Intel Apollo Lake](https://www.intel.com/content/www/us/en/embedded/products/apollo-lake/overview.html) chipset should support the PoC as well (for TXE version  **3.0.1.1107**). 
 
-Because the Gigabyte Brix GP-BPCE-3350C is no longer widely commercially available, these instructions have been updated to instead target the AAEON UP Squared ***[SKU UPS-APLX7-A20-0864](https://up-shop.org/up-squared-series.html)*** (Intel Atom® x7-E3950). (They may also work with the cheaper Apollo Lake based SKUs, but those have not been tested yet.) If you purchase this board, make sure to also get the power supply, [serial adapter](https://up-shop.org/usb-2-0-pin-header-cable.html), and any [USB-to-serial](https://amzn.to/3bP9Zat) adapter. Additionally, the UP Squared only needs a basic [USB debug cable](https://www.datapro.net/products/usb-3-0-super-speed-a-a-debugging-cable.html) to perform DCI debugging. The USB debug cable should be connected to the port where the yellow USB cable is shown [here](https://www.asset-intertech.com/resources/blog/2020/05/open-source-firmware-explorations-using-dci-on-the-aaeon-up-squared-board/).
+Because the Gigabyte Brix GP-BPCE-3350C is no longer widely commercially available, these instructions have been updated to instead target the AAEON UP Squared ***[SKU UPS-APLX7-A20-0864](https://up-shop.org/up-squared-series.html)*** (Intel Atom® x7-E3950). If you purchase this board, make sure to also get the power supply, [serial adapter](https://up-shop.org/usb-2-0-pin-header-cable.html), and any [USB-to-serial](https://amzn.to/3bP9Zat) adapter. Additionally, the UP Squared only needs a basic [USB debug cable](https://www.datapro.net/products/usb-3-0-super-speed-a-a-debugging-cable.html) to perform DCI debugging. The USB debug cable should be connected to the port where the yellow USB cable is shown [here](https://www.asset-intertech.com/resources/blog/2020/05/open-source-firmware-explorations-using-dci-on-the-aaeon-up-squared-board/).
 
 # Required Software 
 
@@ -143,10 +143,11 @@ editor in the output file that was built by fit.exe:
 
 ![screenshot](pic/hap.png)
 
+At the end of the process you should have a file similar to the example file provided [here](bin/UP_5.2+DCI+TXE_Downgraded+Exploit+HAP.bin), although that is for UP BIOS version 5.2, and the preceeding instructions are for version 6.1.
 
 # Writing the Image to SPI Flash[](#writeimage)
 
-**To write the image to SPI flash, we highly recommend using an SPI programmer.  
+**To write the image to SPI flash, we highly recommend using an SPI programmer (such as the [Dediprog SF600Plus](https://www.dediprog.com/product/SF600Plus)).  
 Be sure to back up the original firmware so you can restore from it if something goes wrong!**
 
 # Preparing the USB Debug Cable
