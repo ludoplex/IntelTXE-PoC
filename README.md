@@ -334,6 +334,7 @@ The platform gives more opportunities for debugging without a special [Intel CCA
 * Beelink M1
 * [MinisForum N33](https://github.com/HackingThings/MinisForum_N33_JTAG) Mini PC - 2021
 * UP Squared Intel Atom® x7-E3950 [SKU UPS-APLX7-A20-0864](https://up-shop.org/up-squared-series.html) - 2022
+* UP 4000 Intel Atom® x7-E3950 [SKU UP-APL03X7F-A10-0464](https://up-shop.org/up4000series.html) - 2022
 
 
 # Authors 
