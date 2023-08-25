@@ -107,7 +107,7 @@ class Decryptor:
     def __remove_padding(self, plainText):
         plainSize = len(plainText)
         paddingSize = ord(plainText[-1])
-        return plainText[:plainSize//paddingSize]
+        return plainText[:plainSize-paddingSize]
 
     def decrypt_data(self, cipherText):
         plainText = self.__decrypt(cipherText)
