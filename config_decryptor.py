@@ -12,13 +12,13 @@ import shutil
 import zipfile
 
 from argparse import ArgumentParser as argpars
-from Crypto.Cipher import AES
-from Crypto.Hash import SHA as sha1
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives import hashes
 
 try:
-    xrange          # Python 2
-except NameError:
-    xrange = range  # Python 3
+    range          # Python 3
+except NameError as e:
+    range = range  # Python 3
 
 
 def create_backup(paths):
@@ -91,7 +91,7 @@ class Decryptor:
             sha = sha1.new()
             sha.update(d+key)
             d = sha.digest()
-            for _ in xrange(self.COUNT-1):
+            for _ in range(self.COUNT-1):
                 sha = sha1.new()
                 sha.update(d)
                 d = sha.digest()
